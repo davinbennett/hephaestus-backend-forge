@@ -20,7 +20,7 @@ Estimasi waktu: 20-30 menit.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+tempat untuk menyimpan data/value dan itu didalam memori komputer
 ```
 
 ### 2. Apa itu data type?
@@ -28,7 +28,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+jenis data untuk gimana data disimpan dan dioleh oleh bahasa pemrograman (int, float, double, string, char)
 ```
 
 ### 3. Sebutkan contoh tipe data untuk text, number, dan true/false.
@@ -36,7 +36,9 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+text: char, text, string, varchar
+number: float, double, int, long int, long float
+true/false: bool
 ```
 
 ### 4. Apa perbedaan variable declaration dan assignment?
@@ -44,7 +46,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+declaration: variabel yang hanya berisi variabel aja tanpa ada value (int i;)
+assignment: variabel yang sudah diberikan suatu value (int i = 0;)
 ```
 
 ### 5. Apa itu camelCase?
@@ -52,7 +55,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+suatu format penulisan dengan awalan huruf kecil, dan jika lebih dari 1 kata, maka kata berikutnya harus kapital dan disambung dengan kata sebelumnya (testCase)
 ```
 
 ## Section B - Class and Object
@@ -62,7 +65,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+blueprint untuk menciptakan objek. dan didalam class ada attribute dan method
 ```
 
 ### 7. Apa itu object?
@@ -70,7 +73,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+hasil dari blueprint yang sudah ada. dan object ini mempunyai attribute dan method dari class/blueprint yang sudah dibuat tadi
 ```
 
 ### 8. Apa perbedaan class dan object?
@@ -78,7 +81,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+kalau class adalah blueprint/templatenya, kalau object adalah hasil dari blueprint. Jadi object bisa memakai attribute dan method dari class yang sudah dibuat
 ```
 
 ## Section C - Field, Method, Constructor
@@ -88,7 +91,11 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+variabel/atribute yang dimiliki oleh class dan mempunyai tipe data (
+    class Human:
+        String name; <- ATRIBUTE
+        int age;     <- ATRIBUTE
+)
 ```
 
 ### 10. Apa itu method?
@@ -96,7 +103,14 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+fungsi dalam class yang berguna untuk menjalankan suatu aktivitas terhadap atribute (
+    class Human:
+        String name; <- ATRIBUTE
+        int age;     <- ATRIBUTE
+
+        void eat(){}    <- method
+        int sumAge(){}  <- method
+)
 ```
 
 ### 11. Apa itu parameter?
@@ -104,7 +118,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+variabel yang akan dipakai oleh method untuk menerima value dari luar method itu
 ```
 
 ### 12. Apa itu return value?
@@ -112,7 +126,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+hasil pengembalian dari method itu setelah selesai dirun
 ```
 
 ### 13. Apa itu constructor?
@@ -120,7 +134,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+method khusus dalam class yang jika class itu dipanggil maka otomatis method itu akan dijalankan
 ```
 
 ## Section D - Access Modifier
@@ -130,7 +144,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+supaya atribute/method hanya diakses didalam class itu aja
 ```
 
 ### 15. Apa fungsi public?
@@ -138,7 +152,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+supaya setiap attribute/method didalam suatu class bisa dipakai class lainnya
 ```
 
 ### 16. Kenapa field biasanya dibuat private?
@@ -146,7 +160,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Supaya class lain tidak bisa akses langsung atribute dari class yang membuat private field itu, jadi apabila ingin mengakses harus pakai getter dan setter
 ```
 
 ## Section E - Getter and Setter
@@ -156,7 +170,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+method untuk mendapatkan value dari atribute yang diprivate di class lain
 ```
 
 ### 18. Apa fungsi setter?
@@ -164,7 +178,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+method untuk menentukan value dari atribute yang diprivate di class lain
 ```
 
 ### 19. Kenapa tidak semua field dibuat public?
@@ -172,7 +186,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+karena berkaitan dengan keamanan data, dengan public maka semua class bisa mengubah atribute dari suatu class sehingga bisa menyebabkan bug. Jadi dengan di private, apabila class lain ingin akses atribute private dari class lain, harus pakai method getter/setter, tidak langsung mengakses ke attributenya
 ```
 
 ## Section F - Collection
@@ -182,7 +196,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+struktur data untuk menyimpan kumpulan data di 1 variabel
 ```
 
 ### 21. Apa itu Map?
@@ -190,7 +204,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+struktur data yang menyimpan kumpulan data dalam bentuk key dan value
 ```
 
 ### 22. Kapan menggunakan List dan kapan menggunakan Map?
@@ -198,7 +212,14 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+list : kalau data sequence dan 1 nama list hanya berisi kumpulan data yang merepresentasikan nama list itu (nama=['davin', 'bennett'])
+
+map : ketika dalam 1 nama map ada beberapa data yang perlu ditampilkan dengan memakai key-value (
+    data : {
+        'name': 'bennet',
+        'age': 12
+    }
+)
 ```
 
 ## Section G - OOP Basic
@@ -208,7 +229,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+metode membungkus method/attribute didalam satu class dan membatasi akses method/attribute untuk diakses di class lain
 ```
 
 ### 24. Apa itu interface?
@@ -216,7 +237,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+kumpulan method yang harus diimplementasikan oleh class yang pakai class interface itu. jadi jika ada 4 method di interface a, maka class yang pakai interface a harus implementasikan 4 method itu di class itu
 ```
 
 ### 25. Apa itu abstract class?
@@ -224,7 +245,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+class yang tidak bisa dibuat object secara langsung. dan didalam abstract class bisa punya method. 
 ```
 
 ### 26. Apa perbedaan interface dan abstract class?
@@ -232,7 +253,18 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Abstract class: 
+1. hanya sebagai class dasar, jadi tidak bisa dibuat object
+2. bisa berisi method yang ada isinya & abstract method
+3. bisa punya atribute
+4. pakai extends untuk inherit 
+5. bisa punya constructor
+
+Interface:
+1. sebagai blueprint/template, jadi class lain yang implement ke interface, harus memakai semua method yang ada di interface
+2. method yang di interface tanpa isi semua  
+3. tidak punya constructor
+4. menggunakan implements untuk inherit
 ```
 
 ## Self Assessment
@@ -241,10 +273,10 @@ Beri tanda sesuai pemahaman kamu saat ini.
 
 | Topik | Belum paham | Mulai paham | Cukup paham |
 | --- | --- | --- | --- |
-| Basic syntax | [ ] | [ ] | [ ] |
-| Class and object | [ ] | [ ] | [ ] |
-| Field/method/constructor | [ ] | [ ] | [ ] |
-| Access modifier | [ ] | [ ] | [ ] |
-| Getter/setter | [ ] | [ ] | [ ] |
-| List/Map | [ ] | [ ] | [ ] |
-| Interface/abstract class | [ ] | [ ] | [ ] |
+| Basic syntax | [ ] | [ ] | [V] |
+| Class and object | [ ] | [ ] | [V] |
+| Field/method/constructor | [ ] | [ ] | [V] |
+| Access modifier | [ ] | [ ] | [V] |
+| Getter/setter | [ ] | [ ] | [V] |
+| List/Map | [ ] | [ ] | [V] |
+| Interface/abstract class | [ ] | [ ] | [V] |
