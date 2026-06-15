@@ -235,17 +235,17 @@ Expected:
 
 ## Acceptance Criteria
 
-- [ ] `POST /api/v1/customers` returns 201 for valid request.
-- [ ] `POST /api/v1/customers` returns 400 for invalid request.
-- [ ] Invalid request returns code `VALIDATION_ERROR`.
-- [ ] Error response includes field-level errors.
-- [ ] `GET /api/v1/customers/{id}` returns 404 if customer is not found.
-- [ ] Customer not found returns code `CUSTOMER_NOT_FOUND`.
-- [ ] Unexpected error returns 500 with generic message.
-- [ ] Controller remains clean.
-- [ ] Error handling is centralized in `GlobalExceptionHandler`.
-- [ ] No database is used.
-- [ ] Code can run locally.
+- [V] `POST /api/v1/customers` returns 201 for valid request.
+- [V] `POST /api/v1/customers` returns 400 for invalid request.
+- [V] Invalid request returns code `VALIDATION_ERROR`.
+- [V] Error response includes field-level errors.
+- [V] `GET /api/v1/customers/{id}` returns 404 if customer is not found.
+- [V] Customer not found returns code `CUSTOMER_NOT_FOUND`.
+- [V] Unexpected error returns 500 with generic message.
+- [V] Controller remains clean.
+- [V] Error handling is centralized in `GlobalExceptionHandler`.
+- [V] No database is used.
+- [V] Code can run locally.
 
 ## Optional Challenge
 
