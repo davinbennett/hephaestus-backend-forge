@@ -18,7 +18,7 @@ Pretest ini digunakan untuk mengukur pemahaman awal peserta tentang API contract
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Kesepakatan antara client dan server tentang bagaimana API digunakan, termasuk format request dan response
 ```
 
 ### 2. Kenapa API contract penting?
@@ -26,7 +26,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Agar frontend dan backend bisa bekerja konsisten tanpa miskomunikasi
 ```
 
 ### 3. Apa saja isi API contract?
@@ -34,7 +34,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Endpoint, HTTP method, request (params/body), response, status code, dan format data
 ```
 
 ### 4. Apa itu endpoint?
@@ -42,7 +42,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+URL yang digunakan untuk mengakses resource API.
 ```
 
 ### 5. Apa itu HTTP method?
@@ -50,7 +50,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Jenis operasi pada API seperti GET, POST, PUT, DELETE
 ```
 
 ### 6. Apa itu request body?
@@ -58,7 +58,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Data yang dikirim client ke server dalam request
 ```
 
 ### 7. Apa itu response body?
@@ -66,7 +66,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Data yang dikirim server sebagai hasil dari request
 ```
 
 ### 8. Apa itu HTTP status code?
@@ -74,7 +74,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Kode angka yang menunjukkan hasil request (200, 404)
 ```
 
 ### 9. Kenapa request dan response perlu ditulis jelas?
@@ -82,7 +82,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Agar implementasi konsisten dan menghindari error/mismatch
 ```
 
 ### 10. Apa risiko jika API contract tidak jelas?
@@ -90,7 +90,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Bug, miskomunikasi, integrasi gagal, dan development lebih lama
 ```
 
 ## Section B - DTO
@@ -100,7 +100,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Object untuk transfer data antara client dan server
 ```
 
 ### 12. Apa itu request DTO?
@@ -108,7 +108,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+untuk menerima data dari client
 ```
 
 ### 13. Apa itu response DTO?
@@ -116,7 +116,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+untuk mengirim data ke client
 ```
 
 ### 14. Kenapa DTO dan model sebaiknya dipisah?
@@ -124,7 +124,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Agar struktur internal tidak terekspos dan lebih fleksibel dalam perubahan
 ```
 
 ### 15. Kenapa JSON biasanya menggunakan snake_case sedangkan Java menggunakan camelCase?
@@ -132,7 +132,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+JSON umum pakai snake_case, Java standard camelCase
 ```
 
 ### 16. Apa fungsi @JsonProperty?
@@ -140,7 +140,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Untuk mapping nama field JSON ke field di Java
 ```
 
 ## Section C - HTTP Method
@@ -150,7 +150,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Untuk membuat resource baru
 ```
 
 ### 18. Apa fungsi GET?
@@ -158,7 +158,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Untuk update sebagian data resource.
 ```
 
 ### 19. Apa fungsi PUT?
@@ -166,7 +166,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Untuk update seluruh data resource.
 ```
 
 ### 20. Apa fungsi PATCH?
@@ -174,7 +174,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Untuk update sebagian data resource.
 ```
 
 ### 21. Apa perbedaan PUT dan PATCH?
@@ -182,7 +182,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+PUT mengganti seluruh data, PATCH hanya sebagian.
 ```
 
 ### 22. Kapan menggunakan 201 Created?
@@ -190,7 +190,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Saat berhasil membuat resource baru.
 ```
 
 ### 23. Kapan menggunakan 200 OK?
@@ -198,7 +198,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Saat request berhasil.
 ```
 
 ### 24. Kapan menggunakan 400 Bad Request?
@@ -206,7 +206,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Saat request invalid/salah format.
 ```
 
 ### 25. Kapan menggunakan 404 Not Found?
@@ -214,7 +214,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Saat resource tidak ditemukan.
 ```
 
 ## Section D - API Testing
@@ -224,7 +224,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Proses menguji endpoint API untuk memastikan sesuai kontrak.
 ```
 
 ### 27. Kenapa API perlu dites?
@@ -232,7 +232,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Untuk memastikan API bekerja benar dan tidak error.
 ```
 
 ### 28. Tool apa yang biasa digunakan untuk API testing?
@@ -240,7 +240,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Postman, Insomnia, curl.
 ```
 
 ### 29. Apa yang perlu dicek saat melakukan API testing?
@@ -248,7 +248,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Status code, response body, format data, error handling.
 ```
 
 ### 30. Apa itu expected response?
@@ -256,7 +256,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Response yang diharapkan sesuai dengan API contract.
 ```
 
 ## Section E - Swagger
@@ -266,7 +266,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Tool untuk dokumentasi dan testing API secara interaktif.
 ```
 
 ### 32. Apa itu OpenAPI?
@@ -274,7 +274,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Standar spesifikasi untuk mendefinisikan API.
 ```
 
 ### 33. Apa manfaat Swagger UI?
@@ -282,7 +282,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Melihat dan mencoba API langsung dari browser.
 ```
 
 ### 34. Apa bedanya Postman dan Swagger UI?
@@ -290,7 +290,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Postman untuk testing manual; Swagger UI lebih ke dokumentasi + testing.
 ```
 
 ### 35. Menurut kamu, apakah Swagger bisa menggantikan dokumentasi API manual? Jelaskan.
@@ -298,19 +298,19 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Bisa sebagian, karena otomatis dan interaktif, tapi kadang tetap butuh dokumentasi tambahan untuk penjelasan bisnis.
 ```
 
 ## Self Assessment
 
 | Area | Score 1-5 |
 | --- | --- |
-| API contract | |
-| DTO | |
-| HTTP method | |
-| API testing | |
-| Swagger UI | |
-| OpenAPI | |
+| API contract |4|
+| DTO |4|
+| HTTP method |4|
+| API testing |4|
+| Swagger UI |4|
+| OpenAPI |4|
 
 ## Notes
 
