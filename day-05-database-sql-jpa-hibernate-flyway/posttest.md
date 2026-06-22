@@ -9,7 +9,7 @@ Posttest ini digunakan untuk mengukur pemahaman peserta setelah mempelajari Data
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Map disimpan di RAM dan hilang kalau app mati, database disimpan di disk jadi data tetap ada
 ```
 
 2. Kenapa database diperlukan pada aplikasi backend production?
@@ -17,7 +17,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Supaya data aman, tidak hilang, bisa dipakai banyak user, dan scalable
 ```
 
 3. Apa fungsi SELECT, INSERT, UPDATE, dan DELETE pada SQL?
@@ -25,7 +25,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+SELECT ambil data, INSERT tambah data, UPDATE ubah data, DELETE hapus data
 ```
 
 4. Apa fungsi WHERE dan ILIKE di PostgreSQL?
@@ -33,7 +33,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+WHERE buat filter data, ILIKE buat cari teks tanpa peduli huruf besar/kecil
 ```
 
 5. Apa itu primary key dan foreign key?
@@ -41,7 +41,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Primary key = ID unik tiap data, foreign key = penghubung ke tabel lain
 ```
 
 6. Apa itu JPA dan Hibernate, serta apa perbedaannya?
@@ -49,7 +49,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+JPA adalah standar dokumen, bukan libary. Dan Hibernate adalah implementasi dari JPA
 ```
 
 7. Apa itu Entity dan apa fungsi anotasi `@Entity`, `@Id`, serta `@GeneratedValue`?
@@ -57,7 +57,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Entity adalah representasi tabel.
+@Entity tandai class, @Id primary key, @GeneratedValue auto ID.
 ```
 
 8. Apa fungsi `@Table` dan `@Column`?
@@ -65,7 +66,7 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+@Table buat nama tabel, @Column buat mapping kol
 ```
 
 9. Apa itu Repository dan apa manfaat `JpaRepository`?
@@ -73,7 +74,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Repository buat akses database.
+JpaRepository kasih CRUD siap pakai.   
 ```
 
 10. Apa itu derived query method? Berikan contoh method untuk mencari customer berdasarkan email.
@@ -81,7 +83,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Query otomatis dari nama method.
+Contoh: findByEmail(String email)
 ```
 
 11. Apa fungsi `@Query`? Jelaskan perbedaan JPQL dan native query.
@@ -89,7 +92,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+@Query buat query manual.
+JPQL pakai entity, native pakai SQL langsung.
 ```
 
 12. Apa itu Flyway dan kenapa database migration penting?
@@ -97,7 +101,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Flyway buat ngatur perubahan database.
+Biar rapi dan konsisten.
 ```
 
 13. Apa maksud penamaan file migration seperti `V1__create_customers_table.sql`? Kenapa migration lama sebaiknya tidak diubah setelah dijalankan?
@@ -105,7 +110,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+V1 = versi.
+Jangan ubah karena sudah tercatat, bisa bikin error
 ```
 
 14. Jelaskan relationship one-to-many dan many-to-one dengan contoh Customer dan Order.
@@ -113,7 +119,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+1 customer punya banyak order (one-to-many).
+1 order milik 1 customer (many-to-one)
 ```
 
 15. Apa fungsi `@ManyToOne`, `@OneToMany`, dan `@JoinColumn`?
@@ -121,7 +128,9 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+@ManyToOne = banyak ke satu
+@OneToMany = satu ke banyak
+@JoinColumn = foreign key
 ```
 
 16. Apa perbedaan lazy loading dan eager loading? Kenapa `FetchType.LAZY` sering lebih aman sebagai default?
@@ -129,7 +138,9 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Lazy = ambil data pas dibutuhkan.
+Eager = ambil langsung.
+Lazy lebih aman biar tidak ambil data berlebihan
 ```
 
 17. Apa itu SQL join? Jelaskan perbedaan `INNER JOIN` dan `LEFT JOIN`.
@@ -137,7 +148,9 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+JOIN gabung tabel.
+INNER JOIN = hanya yang cocok
+LEFT JOIN = semua kiri + yang cocok kanan
 ```
 
 18. Apa itu N+1 query problem dan bagaimana cara sederhana menguranginya?
@@ -145,7 +158,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+N+1 = query terlalu banyak.
+Solusi: pakai join fetch atau entity graph
 ```
 
 19. Kenapa Entity sebaiknya tidak langsung dikembalikan sebagai API response? Apa manfaat DTO?
@@ -153,7 +167,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+Entity tidak langsung ke API karena bisa bocor data & berat.
+DTO biar aman dan lebih rapi
 ```
 
 20. Apa fungsi `@Transactional` dan kapan menggunakan `@Transactional(readOnly = true)`?
@@ -161,7 +176,8 @@ Tulis jawaban di sini.
 Jawaban:
 
 ```text
-Tulis jawaban di sini.
+@Transactional buat manage transaksi.
+readOnly = true untuk query biar lebih cepat & aman
 ```
 
 ## Reflection
@@ -169,8 +185,8 @@ Tulis jawaban di sini.
 Apa 3 hal utama yang kamu pahami hari ini?
 
 ```text
-1.
-2.
+1. cara connect ke database
+2. bedanya lazy dan eager
 3.
 ```
 
