@@ -187,7 +187,7 @@ Apa 3 hal utama yang kamu pahami hari ini?
 ```text
 1. cara connect ke database
 2. bedanya lazy dan eager
-3.
+3. cukup membuat repo tanpa implnya
 ```
 
 Apa 2 hal yang masih membingungkan?
