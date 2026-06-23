@@ -4,8 +4,8 @@ import com.example.main.dto.response.PaymentTransactionResponse;
 import com.example.main.dto.response.RepaymentScheduleResponse;
 import com.example.main.security.RequiresRoles;
 import com.example.main.security.UserRole;
-import com.example.main.services.PaymentTransactionService;
 import com.example.main.services.RepaymentScheduleService;
+import com.example.main.template.Response; // Impor wrapper Response terpusat
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,9 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/payment-transactions")
-@Tag(name = "Payment Transaction Management", description = "Kumpulan API untuk mencatat dan mengelola pembayaran cicilan")
-    public class RepaymentScheduleController {
+@RequestMapping("/api/v1/repayment-schedules") // KOREKSI: Path disesuaikan dengan domain entitasnya
+@Tag(name = "Repayment Schedule Management", description = "Kumpulan API untuk mengelola jadwal cicilan pembayaran")
+public class RepaymentScheduleController { // KOREKSI: Indentasi dan nama kelas diselaraskan
 
     private final RepaymentScheduleService repaymentScheduleService;
 
@@ -38,12 +38,12 @@ import org.springframework.web.bind.annotation.*;
         @ApiResponse(responseCode = "200", description = "Data jadwal cicilan ditemukan"),
         @ApiResponse(responseCode = "404", description = "ID jadwal cicilan tidak ditemukan")
     })
-    public ResponseEntity<RepaymentScheduleResponse> getRepaymentScheduleById(
+    public ResponseEntity<Response<RepaymentScheduleResponse>> getRepaymentScheduleById(
             @Parameter(description = "ID unik dari jadwal cicilan", example = "1") 
             @PathVariable Long id) {
         
-        RepaymentScheduleResponse response = repaymentScheduleService.getRepaymentScheduleById(id);
-        return ResponseEntity.ok(response);
+        RepaymentScheduleResponse data = repaymentScheduleService.getRepaymentScheduleById(id);
+        return ResponseEntity.ok(Response.ok(data, "Repayment schedule details retrieved successfully"));
     }
 
     @GetMapping("/{repayment_schedule_id}/payment-transactions")
@@ -56,11 +56,11 @@ import org.springframework.web.bind.annotation.*;
         @ApiResponse(responseCode = "200", description = "Daftar transaksi pembayaran berhasil diambil"),
         @ApiResponse(responseCode = "404", description = "ID jadwal cicilan tidak ditemukan")
     })
-    public ResponseEntity<List<PaymentTransactionResponse>> getTransactionsByScheduleId(
+    public ResponseEntity<Response<List<PaymentTransactionResponse>>> getTransactionsByScheduleId(
             @Parameter(description = "ID dari jadwal cicilan", example = "1") 
             @PathVariable("repayment_schedule_id") Long repaymentScheduleId) {
         
-        List<PaymentTransactionResponse> responses = repaymentScheduleService.getPaymentTransactionsByScheduleId(repaymentScheduleId);
-        return ResponseEntity.ok(responses);
+        List<PaymentTransactionResponse> data = repaymentScheduleService.getPaymentTransactionsByScheduleId(repaymentScheduleId);
+        return ResponseEntity.ok(Response.ok(data, "Payment transactions for this schedule retrieved successfully"));
     }
 }

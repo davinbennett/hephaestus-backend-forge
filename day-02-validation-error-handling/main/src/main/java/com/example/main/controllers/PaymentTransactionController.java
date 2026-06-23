@@ -5,10 +5,13 @@ import com.example.main.dto.response.PaymentTransactionResponse;
 import com.example.main.security.RequiresRoles;
 import com.example.main.security.UserRole;
 import com.example.main.services.PaymentTransactionService;
+import com.example.main.template.Response;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +35,15 @@ public class PaymentTransactionController {
         description = "Mengeksekusi pembayaran cicilan, memvalidasi nominal, serta mengubah status jadwal cicilan menjadi PAID jika sukses. [Akses: ADMIN, STAFF]"
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "211", description = "Pembayaran berhasil diproses"),
+        @ApiResponse(responseCode = "201", description = "Pembayaran berhasil diproses"),
         @ApiResponse(responseCode = "400", description = "Nominal tidak sesuai / Cicilan sudah lunas"),
         @ApiResponse(responseCode = "404", description = "Jadwal cicilan tidak ditemukan")
     })
-    public ResponseEntity<PaymentTransactionResponse> createTransaction(
+    public ResponseEntity<Response<PaymentTransactionResponse>> createTransaction(
             @Valid @RequestBody PaymentTransactionRequest request) {
         
-        PaymentTransactionResponse response = paymentTransactionService.processPayment(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        PaymentTransactionResponse data = paymentTransactionService.processPayment(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Response.created(data, "Payment transaction processed successfully"));
     }
 }

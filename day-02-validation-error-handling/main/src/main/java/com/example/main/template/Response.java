@@ -1,50 +1,50 @@
 package com.example.main.template;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL) 
+import org.slf4j.MDC;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
+@Setter
 public class Response<T> {
     
     private String message;
-    
     private T data;
-
     private String code;
     private List<?> errors; 
 
-    private Response(int statusCode, String message, T data) {
+    @JsonProperty("correlation_id")
+    private String correlationId;
+
+    private Response(String message, T data) {
         this.message = message;
         this.data = data;
+        this.correlationId = MDC.get("correlation_id");
     }
 
-    private Response(String code, String message, List<?> errors) {
+    private Response(String code, String message, String correlationId, List<?> errors) {
         this.code = code;
         this.message = message;
+        this.correlationId = correlationId;
         this.errors = errors;
     }
 
     public static <T> Response<T> ok(T data, String message) {
-        return new Response<>(200, message, data);
+        return new Response<>(message, data);
     }
 
     public static <T> Response<T> created(T data, String message) {
-        return new Response<>(201, message, data);
+        return new Response<>(message, data);
     }
 
-    public static <T> Response<T> errorSpec(String code, String message, List<?> errors) {
-        return new Response<>(code, message, errors);
+    public static <T> Response<T> errorSpec(String code, String message, String correlationId, List<?> errors) {
+        return new Response<>(code, message, correlationId, errors);
     }
-
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-
-    public T getData() { return data; }
-    public void setData(T data) { this.data = data; }
-
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
-
-    public List<?> getErrors() { return errors; }
-    public void setErrors(List<?> errors) { this.errors = errors; }
 }

@@ -7,11 +7,13 @@ import com.example.main.dto.response.RepaymentScheduleResponse;
 import com.example.main.security.RequiresRoles;
 import com.example.main.security.UserRole;
 import com.example.main.services.LoanApplicationService;
+import com.example.main.template.Response; // Impor wrapper Response terpusat
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/loan-applications")
+@Tag(name = "Loan Application Management", description = "Kumpulan API untuk mengelola pengajuan pinjaman")
 public class LoanApplicationController {
 
     private final LoanApplicationService loanApplicationService;
@@ -41,31 +44,12 @@ public class LoanApplicationController {
         @ApiResponse(responseCode = "400", description = "Request tidak valid / Gagal validasi data"),
         @ApiResponse(responseCode = "404", description = "Customer tidak ditemukan")
     })
-    public ResponseEntity<LoanApplicationResponse> createLoanApplication(
+    public ResponseEntity<Response<LoanApplicationResponse>> createLoanApplication(
             @Valid @RequestBody LoanApplicationRequest request) {
-        LoanApplicationResponse response = loanApplicationService.createLoanApplication(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        LoanApplicationResponse data = loanApplicationService.createLoanApplication(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Response.created(data, "Loan application submitted successfully"));
     }
-
-    // @GetMapping
-    // @RequiresRoles({UserRole.ADMIN, UserRole.STAFF, UserRole.APPROVER, UserRole.MANAGER})
-    // @Operation(
-    //     summary = "Mendapatkan semua pengajuan pinjaman", 
-    //     description = "Mengambil data seluruh pengajuan pinjaman. Mendukung filter opsional berdasarkan status dan ID customer. [Akses: Semua Role]"
-    // )
-    // @ApiResponses({
-    //     @ApiResponse(responseCode = "200", description = "Berhasil mengambil daftar pengajuan pinjaman"),
-    //     @ApiResponse(responseCode = "400", description = "Parameter status yang dikirimkan tidak valid")
-    // })
-    // public ResponseEntity<List<LoanApplicationResponse>> getAllLoanApplications(
-    //         @Parameter(description = "Filter berdasarkan status loan (e.g. SUBMITTED, APPROVED)", example = "SUBMITTED") 
-    //         @RequestParam(required = false) String status,
-    //         @Parameter(description = "Filter berdasarkan ID unik customer", example = "1") 
-    //         @RequestParam(required = false, name = "customer_id") Long customerId) {
-        
-    //     List<LoanApplicationResponse> response = loanApplicationService.getAllLoanApplications(status, customerId);
-    //     return ResponseEntity.ok(response);
-    // }
 
     @GetMapping("/{id}")
     @RequiresRoles({UserRole.ADMIN, UserRole.STAFF, UserRole.APPROVER, UserRole.MANAGER})
@@ -77,11 +61,11 @@ public class LoanApplicationController {
         @ApiResponse(responseCode = "200", description = "Data pengajuan pinjaman ditemukan"),
         @ApiResponse(responseCode = "404", description = "Data pengajuan pinjaman tidak ditemukan")
     })
-    public ResponseEntity<LoanApplicationResponse> getLoanApplicationById(
+    public ResponseEntity<Response<LoanApplicationResponse>> getLoanApplicationById(
             @Parameter(description = "ID unik dari pengajuan pinjaman", example = "1") 
             @PathVariable Long id) {
-        LoanApplicationResponse response = loanApplicationService.getLoanApplicationById(id);
-        return ResponseEntity.ok(response);
+        LoanApplicationResponse data = loanApplicationService.getLoanApplicationById(id);
+        return ResponseEntity.ok(Response.ok(data, "Loan application details retrieved successfully"));
     }
 
     @PatchMapping("/{id}/approve")
@@ -95,12 +79,12 @@ public class LoanApplicationController {
         @ApiResponse(responseCode = "403", description = "Akses ditolak karena batasan nominal Manager atau hak akses tidak sah"),
         @ApiResponse(responseCode = "404", description = "Data pengajuan pinjaman tidak ditemukan")
     })
-    public ResponseEntity<LoanApplicationResponse> approveLoanApplication(
+    public ResponseEntity<Response<LoanApplicationResponse>> approveLoanApplication(
             @Parameter(description = "ID unik dari pengajuan pinjaman", example = "1") @PathVariable Long id,
             @Parameter(hidden = true) @RequestAttribute("USER_ROLE") UserRole userRole) { 
         
-        LoanApplicationResponse response = loanApplicationService.approveLoanApplication(id, userRole);
-        return ResponseEntity.ok(response);
+        LoanApplicationResponse data = loanApplicationService.approveLoanApplication(id, userRole);
+        return ResponseEntity.ok(Response.ok(data, "Loan application approved successfully"));
     }
 
     @PatchMapping("/{id}/reject")
@@ -113,11 +97,11 @@ public class LoanApplicationController {
         @ApiResponse(responseCode = "200", description = "Pengajuan pinjaman berhasil ditolak"),
         @ApiResponse(responseCode = "404", description = "Data pengajuan pinjaman tidak ditemukan")
     })
-    public ResponseEntity<LoanApplicationResponse> rejectLoanApplication(
+    public ResponseEntity<Response<LoanApplicationResponse>> rejectLoanApplication(
             @Parameter(description = "ID unik dari pengajuan pinjaman", example = "1") 
             @PathVariable Long id) {
-        LoanApplicationResponse response = loanApplicationService.rejectLoanApplication(id);
-        return ResponseEntity.ok(response);
+        LoanApplicationResponse data = loanApplicationService.rejectLoanApplication(id);
+        return ResponseEntity.ok(Response.ok(data, "Loan application rejected successfully"));
     }
 
     @PatchMapping("/{id}/cancel")
@@ -130,11 +114,11 @@ public class LoanApplicationController {
         @ApiResponse(responseCode = "200", description = "Pengajuan pinjaman berhasil dibatalkan"),
         @ApiResponse(responseCode = "404", description = "Data pengajuan pinjaman tidak ditemukan")
     })
-    public ResponseEntity<LoanApplicationResponse> cancelLoanApplication(
+    public ResponseEntity<Response<LoanApplicationResponse>> cancelLoanApplication(
             @Parameter(description = "ID unik dari pengajuan pinjaman", example = "1") 
             @PathVariable Long id) {
-        LoanApplicationResponse response = loanApplicationService.cancelLoanApplication(id);
-        return ResponseEntity.ok(response);
+        LoanApplicationResponse data = loanApplicationService.cancelLoanApplication(id);
+        return ResponseEntity.ok(Response.ok(data, "Loan application cancelled successfully"));
     }
     
     @GetMapping
@@ -147,11 +131,11 @@ public class LoanApplicationController {
         @ApiResponse(responseCode = "200", description = "Berhasil mendapatkan daftar pengajuan pinjaman"),
         @ApiResponse(responseCode = "400", description = "Status yang dikirimkan tidak valid")
     })
-    public ResponseEntity<List<LoanApplicationResponse>> getLoanApplications(
+    public ResponseEntity<Response<List<LoanApplicationResponse>>> getLoanApplications(
             @RequestParam(name = "status", required = false) String status) {
         
-        List<LoanApplicationResponse> response = loanApplicationService.getLoansByStatus(status);
-        return ResponseEntity.ok(response);
+        List<LoanApplicationResponse> data = loanApplicationService.getLoansByStatus(status);
+        return ResponseEntity.ok(Response.ok(data, "Loan applications retrieved successfully"));
     }
 
     @PatchMapping("/{id}/status")
@@ -165,12 +149,12 @@ public class LoanApplicationController {
         @ApiResponse(responseCode = "400", description = "Nilai status tidak valid atau menyalahi aturan transisi"),
         @ApiResponse(responseCode = "404", description = "Data pengajuan pinjaman tidak ditemukan")
     })
-    public ResponseEntity<LoanApplicationResponse> updateLoanStatus(
+    public ResponseEntity<Response<LoanApplicationResponse>> updateLoanStatus(
             @Parameter(description = "ID unik dari pengajuan pinjaman", example = "1") @PathVariable Long id,
             @Valid @RequestBody UpdateLoanStatusRequest request) {
         
-        LoanApplicationResponse response = loanApplicationService.updateLoanStatus(id, request.getStatus());
-        return ResponseEntity.ok(response);
+        LoanApplicationResponse data = loanApplicationService.updateLoanStatus(id, request.getStatus());
+        return ResponseEntity.ok(Response.ok(data, "Loan status dynamically updated successfully"));
     }
 
     @GetMapping("/{loanApplicationId}/repayment-schedules")
@@ -183,11 +167,11 @@ public class LoanApplicationController {
         @ApiResponse(responseCode = "200", description = "Berhasil mendapatkan daftar jadwal pembayaran"),
         @ApiResponse(responseCode = "404", description = "Data pengajuan pinjaman tidak ditemukan")
     })
-    public ResponseEntity<List<RepaymentScheduleResponse>> getRepaymentSchedulesByLoan(
+    public ResponseEntity<Response<List<RepaymentScheduleResponse>>> getRepaymentSchedulesByLoan(
             @Parameter(description = "ID unik dari pengajuan pinjaman", example = "1") 
             @PathVariable(name = "loanApplicationId") Long loanApplicationId) {
         
-        List<RepaymentScheduleResponse> response = loanApplicationService.getRepaymentSchedulesByLoanId(loanApplicationId);
-        return ResponseEntity.ok(response);
+        List<RepaymentScheduleResponse> data = loanApplicationService.getRepaymentSchedulesByLoanId(loanApplicationId);
+        return ResponseEntity.ok(Response.ok(data, "Repayment schedules for this loan retrieved successfully"));
     }
 }

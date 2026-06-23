@@ -89,49 +89,49 @@ Buat file `CODE_REVIEW_CHECKLIST.md` pada project aplikasi peserta. Checklist mi
 
 ### 1. Correctness
 
-- [ ] Logic sesuai requirement.
-- [ ] Happy path berjalan.
-- [ ] Negative path ditangani.
-- [ ] Edge case dipikirkan.
-- [ ] Status transition benar.
-- [ ] Tidak ada business rule yang dilewati.
+- [X] Logic sesuai requirement.
+- [X] Happy path berjalan.
+- [X] Negative path ditangani.
+- [X] Edge case dipikirkan.
+- [X] Status transition benar.
+- [X] Tidak ada business rule yang dilewati.
 
 ### 2. Layer Responsibility
 
-- [ ] Controller hanya mengatur HTTP request/response.
-- [ ] Service berisi business logic.
-- [ ] Repository hanya akses data.
-- [ ] DTO tidak berisi business logic berat.
-- [ ] Security/auth helper tidak dicampur dengan controller.
+- [X] Controller hanya mengatur HTTP request/response.
+- [X] Service berisi business logic.
+- [X] Repository hanya akses data.
+- [X] DTO tidak berisi business logic berat.
+- [X] Security/auth helper tidak dicampur dengan controller.
 
 ### 3. Error Handling
 
-- [ ] `400` untuk validation error, `401` untuk unauthenticated, `403` untuk forbidden, dan `404` untuk data tidak ditemukan.
-- [ ] Error response konsisten dan tidak membocorkan stack trace ke client.
+- [X] `400` untuk validation error, `401` untuk unauthenticated, `403` untuk forbidden, dan `404` untuk data tidak ditemukan.
+- [X] Error response konsisten dan tidak membocorkan stack trace ke client.
 
 ### 4. Security & Authorization
 
-- [ ] Endpoint protected sudah cek token dan role di backend.
-- [ ] `STAFF` tidak bisa approve/reject loan.
-- [ ] `APPROVER` tidak bisa create customer bila rule melarang.
-- [ ] Backend tidak percaya role dari request body.
-- [ ] Token tidak ditulis ke log.
+- [X] Endpoint protected sudah cek token dan role di backend.
+- [X] `STAFF` tidak bisa approve/reject loan.
+- [X] `APPROVER` tidak bisa create customer bila rule melarang.
+- [X] Backend tidak percaya role dari request body.
+- [X] Token tidak ditulis ke log.
 
 ### 5. Testing
 
-- [ ] Service layer punya unit test untuk happy path, negative path, access logic, dan error behavior.
-- [ ] Nama test jelas dan assertion cukup kuat.
+- [X] Service layer punya unit test untuk happy path, negative path, access logic, dan error behavior.
+- [X] Nama test jelas dan assertion cukup kuat.
 
 ### 6. Logging & PII
 
-- [ ] Log menggunakan structured fields dan memiliki `correlation_id`.
-- [ ] Log level tepat dan error log actionable.
-- [ ] Password, token, dan raw PII tidak ditulis ke log.
+- [X] Log menggunakan structured fields dan memiliki `correlation_id`.
+- [X] Log level tepat dan error log actionable.
+- [X] Password, token, dan raw PII tidak ditulis ke log.
 
 ### 7. Maintainability
 
-- [ ] Naming jelas, method tidak terlalu panjang, dan duplicate logic tidak berlebihan.
-- [ ] Code mudah dibaca dan comment hanya menjelaskan trade-off penting.
+- [X] Naming jelas, method tidak terlalu panjang, dan duplicate logic tidak berlebihan.
+- [X] Code mudah dibaca dan comment hanya menjelaskan trade-off penting.
 
 Komentar kurang membantu:
 
@@ -230,14 +230,14 @@ Hindari log yang berisi username bersama password, token, nama lengkap, NIK, dan
 
 ## Acceptance Criteria
 
-- [ ] Tiga service memiliki unit test dengan JUnit 5, Mockito, dan Given-When-Then.
-- [ ] Happy path, negative path, `401`, `403`, approval APPROVER, dan penolakan STAFF dites.
-- [ ] `CODE_REVIEW_CHECKLIST.md` mencakup correctness, error handling, authorization, testing, logging, dan PII.
-- [ ] API mendukung/generate `X-Correlation-Id` dan error response memuat `correlation_id`.
-- [ ] Structured fields serta level `info`/`warn`/`error` digunakan dengan benar.
-- [ ] Forbidden access tercatat sebagai `warn`; unexpected error tercatat sebagai `error`.
-- [ ] Password, token, dan raw PII tidak masuk log.
-- [ ] Pull Request dibuat ke `master`.
+- [X] Tiga service memiliki unit test dengan JUnit 5, Mockito, dan Given-When-Then.
+- [X] Happy path, negative path, `401`, `403`, approval APPROVER, dan penolakan STAFF dites.
+- [X] `CODE_REVIEW_CHECKLIST.md` mencakup correctness, error handling, authorization, testing, logging, dan PII.
+- [X] API mendukung/generate `X-Correlation-Id` dan error response memuat `correlation_id`.
+- [X] Structured fields serta level `info`/`warn`/`error` digunakan dengan benar.
+- [X] Forbidden access tercatat sebagai `warn`; unexpected error tercatat sebagai `error`.
+- [X] Password, token, dan raw PII tidak masuk log.
+- [X] Pull Request dibuat ke `master`.
 
 ## Optional Challenge
 
