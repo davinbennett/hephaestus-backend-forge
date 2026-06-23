@@ -10,15 +10,19 @@ import com.example.main.exceptions.NotFoundException;
 import com.example.main.repositories.PaymentTransactionRepository;
 import com.example.main.repositories.RepaymentScheduleRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentTransactionService {
 
+    private static final Logger log = LoggerFactory.getLogger(PaymentTransactionService.class);
     private final PaymentTransactionRepository paymentTransactionRepository;
     private final RepaymentScheduleRepository repaymentScheduleRepository;
 
@@ -30,15 +34,24 @@ public class PaymentTransactionService {
 
     @Transactional
     public PaymentTransactionResponse processPayment(PaymentTransactionRequest request) {
+        String correlationId = MDC.get("correlation_id");
+
         RepaymentScheduleEntity schedule = repaymentScheduleRepository.findById(request.getRepaymentScheduleId())
-                .orElseThrow(() -> new NotFoundException(
-                        "Repayment schedule not found"));
+                .orElseThrow(() -> {
+                    log.warn("{{\"level\":\"warn\",\"event\":\"payment_failed\",\"reason\":\"Repayment schedule not found\",\"repayment_schedule_id\":{},\"correlation_id\":\"{}\"}}", 
+                            request.getRepaymentScheduleId(), correlationId);
+                    return new NotFoundException("Repayment schedule not found");
+                });
 
         if (ScheduleStatus.PAID == schedule.getStatus()) {
+            log.warn("{{\"level\":\"warn\",\"event\":\"validation_error\",\"reason\":\"Repayment schedule has already been paid\",\"repayment_schedule_id\":{},\"correlation_id\":\"{}\"}}", 
+                    schedule.getId(), correlationId);
             throw new BadRequestException("This repayment schedule has already been paid");
         }
 
         if (request.getPaidAmount().compareTo(schedule.getTotalAmount()) != 0) {
+            log.warn("{{\"level\":\"warn\",\"event\":\"validation_error\",\"reason\":\"Invalid paid amount\",\"expected\":{},\"received\":{},\"repayment_schedule_id\":{},\"correlation_id\":\"{}\"}}", 
+                    schedule.getTotalAmount(), request.getPaidAmount(), schedule.getId(), correlationId);
             throw new BadRequestException("Invalid paid amount. Expected exactly: " + schedule.getTotalAmount());
         }
 
@@ -53,18 +66,22 @@ public class PaymentTransactionService {
         schedule.setStatus(ScheduleStatus.PAID);
         repaymentScheduleRepository.save(schedule);
 
+        log.info("{{\"level\":\"info\",\"event\":\"payment_transaction_processed\",\"transaction_id\":{},\"repayment_schedule_id\":{},\"amount\":{},\"correlation_id\":\"{}\"}}", 
+                savedTransaction.getId(), schedule.getId(), savedTransaction.getPaidAmount(), correlationId);
+
         return mapToResponse(savedTransaction);
     }
 
     @Transactional(readOnly = true)
     public List<PaymentTransactionResponse> getTransactionsByScheduleId(Long scheduleId) {
         if (!repaymentScheduleRepository.existsById(scheduleId)) {
+            String correlationId = MDC.get("correlation_id");
+            log.warn("{{\"level\":\"warn\",\"event\":\"payment_fetch_failed\",\"reason\":\"Repayment schedule not found\",\"repayment_schedule_id\":{},\"correlation_id\":\"{}\"}}", 
+                    scheduleId, correlationId);
             throw new NotFoundException("Repayment schedule not found");
         }
 
-        List<PaymentTransactionEntity> transactions = paymentTransactionRepository.findByRepaymentScheduleId(scheduleId);
-
-        return transactions.stream()
+        return paymentTransactionRepository.findByRepaymentScheduleId(scheduleId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }

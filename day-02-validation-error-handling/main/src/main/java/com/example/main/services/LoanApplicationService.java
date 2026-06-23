@@ -16,6 +16,9 @@ import com.example.main.repositories.LoanApplicationRepository;
 import com.example.main.repositories.RepaymentScheduleRepository;
 import com.example.main.security.UserRole;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class LoanApplicationService {
 
+    private static final Logger log = LoggerFactory.getLogger(LoanApplicationService.class);
     private final LoanApplicationRepository loanApplicationRepository;
     private final CustomerRepository customerRepository;
     private final RepaymentScheduleRepository repaymentScheduleRepository;
@@ -43,8 +47,14 @@ public class LoanApplicationService {
 
     @Transactional
     public LoanApplicationResponse createLoanApplication(LoanApplicationRequest request) {
+        String correlationId = MDC.get("correlation_id");
+
         CustomerEntity customer = customerRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new NotFoundException("Customer Not Found"));
+                .orElseThrow(() -> {
+                    log.warn("{{\"level\":\"warn\",\"event\":\"loan_submission_failed\",\"reason\":\"Customer not found\",\"customer_id\":{},\"correlation_id\":\"{}\"}}", 
+                            request.getCustomerId(), correlationId);
+                    return new NotFoundException("Customer Not Found");
+                });
 
         LoanApplicationEntity loan = new LoanApplicationEntity();
         loan.setCustomer(customer);
@@ -54,6 +64,11 @@ public class LoanApplicationService {
         loan.setStatus(LoanStatus.SUBMITTED);
 
         LoanApplicationEntity savedLoan = loanApplicationRepository.save(loan);
+
+        // 🟢 INFO: loan_application_submitted
+        log.info("{{\"level\":\"info\",\"event\":\"loan_application_submitted\",\"application_id\":{},\"customer_id\":{},\"correlation_id\":\"{}\"}}", 
+                savedLoan.getId(), customer.getId(), correlationId);
+
         return mapToLoanApplicationResponse(savedLoan);
     }
 
@@ -78,46 +93,85 @@ public class LoanApplicationService {
 
     @Transactional(readOnly = true)
     public LoanApplicationResponse getLoanApplicationById(Long id) {
+        String correlationId = MDC.get("correlation_id");
+
         LoanApplicationEntity loan = loanApplicationRepository.findById(id)
-                .orElseThrow(() -> new LoanApplicationNotFoundException("Loan application not found"));
+                .orElseThrow(() -> {
+                    log.warn("{{\"level\":\"warn\",\"event\":\"loan_fetch_failed\",\"reason\":\"Loan application not found\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                            id, correlationId);
+                    return new LoanApplicationNotFoundException("Loan application not found");
+                });
         return mapToLoanApplicationResponse(loan);
     }
 
     @Transactional
     public LoanApplicationResponse approveLoanApplication(Long id, UserRole userRole) {
+        String correlationId = MDC.get("correlation_id");
+
         LoanApplicationEntity loan = loanApplicationRepository.findById(id)
-                .orElseThrow(() -> new LoanApplicationNotFoundException("Loan application not found"));
+                .orElseThrow(() -> {
+                    log.warn("{{\"level\":\"warn\",\"event\":\"loan_approval_failed\",\"reason\":\"Loan application not found\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                            id, correlationId);
+                    return new LoanApplicationNotFoundException("Loan application not found");
+                });
 
         if (userRole == UserRole.MANAGER && loan.getLoanAmount().compareTo(MANAGER_MINIMUM_AMOUNT) <= 0) {
+            // 🟡 WARN: access_denied / bisnis limit rejection
+            log.warn("{{\"level\":\"warn\",\"event\":\"access_denied\",\"role\":\"MANAGER\",\"endpoint\":\"approve\",\"error_code\":\"FORBIDDEN\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                    id, correlationId);
             throw new ForbiddenException("Manager is only allowed to approve loans above 10,000,000");
         }
 
-        // 1. Update status pinjaman menjadi APPROVED
         loan.setStatus(LoanStatus.APPROVED);
         LoanApplicationEntity updatedLoan = loanApplicationRepository.save(loan);
 
-        // 2. TRIGGER PEMBUATAN JADWAL CICILAN OTOMATIS BERDASARKAN TENOR
         repaymentScheduleService.createRepaymentSchedules(updatedLoan);
+
+        // 🟢 INFO: loan_application_approved
+        log.info("{{\"level\":\"info\",\"event\":\"loan_application_approved\",\"application_id\":{},\"role\":\"{}\",\"correlation_id\":\"{}\"}}", 
+                id, userRole.name(), correlationId);
 
         return mapToLoanApplicationResponse(updatedLoan);
     }
 
     @Transactional
     public LoanApplicationResponse rejectLoanApplication(Long id) {
+        String correlationId = MDC.get("correlation_id");
+
         LoanApplicationEntity loan = loanApplicationRepository.findById(id)
-                .orElseThrow(() -> new LoanApplicationNotFoundException("Loan application not found"));
+                .orElseThrow(() -> {
+                    log.warn("{{\"level\":\"warn\",\"event\":\"loan_rejection_failed\",\"reason\":\"Loan application not found\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                            id, correlationId);
+                    return new LoanApplicationNotFoundException("Loan application not found");
+                });
+
         loan.setStatus(LoanStatus.REJECTED);
         LoanApplicationEntity updatedLoan = loanApplicationRepository.save(loan);
+
+        // 🟢 INFO: loan_application_rejected (Aksi bisnis penolakan berhasil diproses sistem)
+        log.info("{{\"level\":\"info\",\"event\":\"loan_application_rejected\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                id, correlationId);
+
         return mapToLoanApplicationResponse(updatedLoan);
     }
 
     @Transactional
     public LoanApplicationResponse cancelLoanApplication(Long id) {
+        String correlationId = MDC.get("correlation_id");
+
         LoanApplicationEntity loan = loanApplicationRepository.findById(id)
-                .orElseThrow(() -> new LoanApplicationNotFoundException("Loan application not found"));
+                .orElseThrow(() -> {
+                    log.warn("{{\"level\":\"warn\",\"event\":\"loan_cancel_failed\",\"reason\":\"Loan application not found\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                            id, correlationId);
+                    return new LoanApplicationNotFoundException("Loan application not found");
+                });
 
         loan.setStatus(LoanStatus.CANCELLED);
         LoanApplicationEntity updatedLoan = loanApplicationRepository.save(loan);
+
+        log.info("{{\"level\":\"info\",\"event\":\"loan_application_cancelled\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                id, correlationId);
+
         return mapToLoanApplicationResponse(updatedLoan);
     }
 
@@ -126,10 +180,7 @@ public class LoanApplicationService {
         if (!customerRepository.existsById(customerId)) {
             throw new NotFoundException("Customer not found");
         }
-
-        List<LoanApplicationEntity> loans = loanApplicationRepository.findLoansByCustomerId(customerId);
-
-        return loans.stream()
+        return loanApplicationRepository.findLoansByCustomerId(customerId).stream()
                 .map(this::mapToLoanApplicationResponse)
                 .collect(Collectors.toList());
     }
@@ -141,40 +192,51 @@ public class LoanApplicationService {
         if (statusStr != null && !statusStr.trim().isEmpty()) {
             try {
                 LoanStatus statusEnum = LoanStatus.valueOf(statusStr.trim().toUpperCase());
-                
                 loans = loanApplicationRepository.findByStatus(statusEnum);
             } catch (IllegalArgumentException e) {
+                String correlationId = MDC.get("correlation_id");
+                log.warn("{{\"level\":\"warn\",\"event\":\"validation_error\",\"reason\":\"Invalid status parameter\",\"value\":\"{}\",\"correlation_id\":\"{}\"}}", 
+                        statusStr, correlationId);
                 throw new BadRequestException("Invalid loan status value: " + statusStr);
             }
-        } 
-        else {
+        } else {
             loans = loanApplicationRepository.findAll();
         }
 
-        return loans.stream()
-                .map(this::mapToLoanApplicationResponse)
-                .collect(Collectors.toList());
+        return loans.stream().map(this::mapToLoanApplicationResponse).collect(Collectors.toList());
     }
 
     @Transactional
     public LoanApplicationResponse updateLoanStatus(Long id, String statusStr) {
+        String correlationId = MDC.get("correlation_id");
+
         LoanApplicationEntity loan = loanApplicationRepository.findById(id)
-                .orElseThrow(() -> new LoanApplicationNotFoundException("Loan application not found"));
+                .orElseThrow(() -> {
+                    log.warn("{{\"level\":\"warn\",\"event\":\"loan_status_update_failed\",\"reason\":\"Loan application not found\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                            id, correlationId);
+                    return new LoanApplicationNotFoundException("Loan application not found");
+                });
 
         LoanStatus newStatus;
         try {
             newStatus = LoanStatus.valueOf(statusStr.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
+            log.warn("{{\"level\":\"warn\",\"event\":\"validation_error\",\"reason\":\"Invalid status transition value\",\"value\":\"{}\",\"correlation_id\":\"{}\"}}", 
+                    statusStr, correlationId);
             throw new BadRequestException("Invalid loan status value: " + statusStr);
         }
 
-        // loan yang sudah CLOSED atau REJECTED gabisa diubah statusnya lagi
         if (loan.getStatus() == LoanStatus.CLOSED || loan.getStatus() == LoanStatus.REJECTED) {
+            log.warn("{{\"level\":\"warn\",\"event\":\"loan_status_update_failed\",\"reason\":\"Terminal status modification attempt\",\"current_status\":\"{}\",\"application_id\":{},\"correlation_id\":\"{}\"}}", 
+                    loan.getStatus(), id, correlationId);
             throw new BadRequestException("Cannot change status of a " + loan.getStatus() + " loan application");
         }
 
         loan.setStatus(newStatus);
         LoanApplicationEntity updatedLoan = loanApplicationRepository.save(loan);
+
+        log.info("{{\"level\":\"info\",\"event\":\"loan_status_updated\",\"application_id\":{},\"new_status\":\"{}\",\"correlation_id\":\"{}\"}}", 
+                id, newStatus.name(), correlationId);
 
         return mapToLoanApplicationResponse(updatedLoan);
     }
@@ -184,10 +246,7 @@ public class LoanApplicationService {
         if (!loanApplicationRepository.existsById(loanApplicationId)) {
             throw new LoanApplicationNotFoundException("Loan application not found");
         }
-
-        List<RepaymentScheduleEntity> schedules = repaymentScheduleRepository.findByLoanApplicationId(loanApplicationId);
-
-        return schedules.stream()
+        return repaymentScheduleRepository.findByLoanApplicationId(loanApplicationId).stream()
                 .map(this::mapToScheduleResponse)
                 .collect(Collectors.toList());
     }
@@ -197,7 +256,6 @@ public class LoanApplicationService {
         response.setId(schedule.getId());
         response.setInstallmentNumber(schedule.getInstallmentNumber());
         response.setDueDate(schedule.getDueDate());
-        
         response.setPrincipalAmount(schedule.getPrincipalAmount());
         response.setInterestAmount(schedule.getInterestAmount());
         response.setTotalAmount(schedule.getTotalAmount());
